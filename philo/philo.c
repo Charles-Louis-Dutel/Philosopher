@@ -3,18 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:48:49 by cdutel            #+#    #+#             */
-/*   Updated: 2024/06/12 20:32:01 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/22 17:55:21 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// void	*routine()
+// void	*routine(void* philostruct)
 // {
-// 	printf("prout\n");
+// 	t_philostruct	*philo;
+
+// 	philo = philostruct;
+// 	int i = 0;
+// 	while (i < 1000000)
+// 	{
+// 		philo->to_increment++;
+// 		i++;
+// 	}
 // 	return (NULL);
 // }
 
@@ -30,7 +38,7 @@ int	check_args(char **argv)
 		{
 			if (!(argv[i][j] >= 48 && argv[i][j] <= 57))
 			{
-				printf("%s: invalid argument\n", argv[i]);
+				printf("%s%s", argv[i], ERR_MSG_NUM);
 				return (-1);
 			}
 			j++;
@@ -42,56 +50,65 @@ int	check_args(char **argv)
 	{
 		j = ft_atoi(argv[i]);
 		if (!(j >= 0 && j <= 2147483647))
-			return (printf("%s: argument must be an integer\n", argv[i]), -1);
+			return (printf("%s%s", argv[i], ERR_MSG_INT), -1);
 		i++;
 	}
 	return (0);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_args	args;
-	t_fork	*forks;
-	t_philo	*ph;
+	t_datastruct	data;
 
 	if (argc < 5 || argc > 6)
 		return (err_msg(ERR_MSG_ARGS), EXIT_FAILURE);
 	if (check_args(argv) == -1)
 		return (EXIT_FAILURE);
-	init_struct(&args, argv);
-	if (create_philos_and_forks(&ph, &forks, &args) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	create_threads(&ph, &args);
-	join_threads(&ph, &args);
-	free(ph);
-	free(forks);
+	if (init_datastruct(&data, argv) == EXIT_FAILURE);
+		return (err_msg(ERR_MSG_MAL), EXIT_FAILURE);
+	if (data.min_meal == 0)
+		return (EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
 }
 
 
 // int	main(int argc, char **argv)
 // {
-// 	pthread_t	*ph;
-// 	t_philo		data;
+// 	pthread_t		*ph;
+// 	t_datastruct	data;
+// 	t_philostruct	philo;
 
 // 	int (i) = 0;
 // 	if (argc == 5 || argc == 6)
 // 	{
+// 		if (argc < 5 || argc > 6)
+// 			return (err_msg(ERR_MSG_ARGS), EXIT_FAILURE);
 // 		if (check_args(argv) == -1)
-// 			return (1);
-// 		init_struct(&data, argv);
+// 			return (EXIT_FAILURE);
+
+// 		init_datastruct(&data, argv);
+// 		printf("data.n_philo : %d\n", data.n_philo);
+
 // 		ph = malloc(sizeof(pthread_t) * data.n_philo);
+
+// 		philo.to_increment = 0;
+
+// 		/*Create threads*/
 // 		while (i < data.n_philo)
 // 		{
-// 			pthread_create(&ph[i], NULL, &routine, NULL);
+// 			pthread_create(&ph[i], NULL, &routine, &philo);
 // 			i++;
 // 		}
 // 		i = 0;
+
+// 		/*Close threads*/
 // 		while (i < data.n_philo)
 // 		{
 // 			pthread_join(ph[i], NULL);
 // 			i++;
 // 		}
+// 		printf("res : %d\n", philo.to_increment);
 // 		free(ph);
 // 	}
+// 	return (0);
 // }

@@ -1,11 +1,10 @@
 NAME = philoso
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -pthread -MMD
+CFLAGS = -Wall -Wextra -Werror -g3 -pthread -MMD #-fsanitize=thread
 
 ############################Sources########################
 SRCS_DIR = philo/
-FILES = philo utils init_struct create_philos manage_errors\
-		create_threads destroy_threads
+FILES = philo init manage_errors utils
 
 SRCS = $(addprefix $(SRCS_DIR), $(FILES))
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/06/12 20:29:00 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/22 17:00:43 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,57 +21,41 @@
 # include <unistd.h>
 
 # define ERR_MSG_WRITE "Write error: no space left on device\n"
-# define ERR_MSG_ARGS "Incorrect input: Retry with: ./philo number_of_philosophers\
-	time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
+# define ERR_MSG_ARGS "Incorrect input: Retry with: ./philo number_of_philosophers \
+time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
+# define ERR_MSG_INT ": argument must be between 0 and int max\n"
+# define ERR_MSG_NUM ": argument must contain only number\n"
 # define ERR_MSG_MAL "Cannot allocate memory\n"
 
-typedef struct s_args
+typedef struct s_philostruct
 {
-	size_t	start_time;
-	int		death_time;
-	int		dead_flag;
-	int		eat_time;
-	int		must_eat;
-	int		philo_num;
-	int		sleep_time;
-}	t_args;
+	int				pos;
+	int				meal_count;
+	pthread_t		thread;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*r_fork;
+}	t_philostruct;
 
-typedef struct s_fork
+typedef struct s_datastruct
 {
-	int				is_used;
-	pthread_mutex_t	fork_lock;
-}	t_fork;
+	t_philostruct	*ph;
+	pthread_mutex_t	print;
+	int				n_philo;
+	int				t_to_die;
+	int				t_to_eat;
+	int				t_to_sleep;
+	int				min_meal;
+}	t_datastruct;
 
-typedef struct s_philo
-{
-	pthread_t	ph_thread;
-	int			eat_num;
-	int			f_l_taken;
-	int			f_r_taken;
-	int			n_philo;
-	t_fork		*right_f;
-	t_fork		*left_f;
-	t_args		*cur_args;
-}	t_philo;
 
-/*Create_philos*/
-int		create_philos_and_forks(t_philo **ph, t_fork **forks, t_args *args);
+/*Init*/
+int		init_datastruct(t_datastruct *data, char **argv);
 
-/*Create_threads*/
-int		create_threads(t_philo **ph, t_args *args);
-
-/*Destroy_threads*/
-void	join_threads(t_philo **ph, t_args *args);
-
-/*Init_struct*/
-int		init_struct(t_args *args, char **argv);
-
-/*Manage_errors*/
-void	err_msg(char *error_msg);
+/*Manage error*/
+int		err_msg(char *msg);
 
 /*Utils*/
 long	ft_atoi(const char *str);
 int		ft_strlen(char *s);
-size_t	get_time();
 
 #endif
