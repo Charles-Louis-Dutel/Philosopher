@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/26 14:25:53 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/26 18:29:43 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,31 @@ int	init_datastruct(t_datastruct *data, char **argv)
 	if (!data->ph)
 		return (EXIT_FAILURE);
 	pthread_mutex_init(&data->print, NULL);
+	return (EXIT_SUCCESS);
+}
+
+int	init_philosophers(t_datastruct *data)
+{
+	int i = 0;
+	data->starttime = ft_get_time();
+	while (i < data->n_philo)
+	{
+		data->ph[i].datainfos = data;
+		data->ph[i].pos = i + 1;
+		data->ph[i].meal_count = 0;
+		pthread_mutex_init(&data->ph[i].l_fork, NULL);
+		if (i == 0)
+			data->ph[i].r_fork = data->ph[data->n_philo - 1].l_fork;
+		else
+			data->ph[i].r_fork = data->ph[i - 1].l_fork;
+		pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
+		i++;
+	}
+	i = 0;
+	while (i < data->n_philo)
+	{
+		pthread_join(data->ph[i].thread, NULL);
+		i++;
+	}
 	return (EXIT_SUCCESS);
 }

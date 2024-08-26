@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/26 14:36:55 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/26 18:29:37 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@ time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat
 # define ERR_MSG_NUM ": argument must contain only number\n"
 # define ERR_MSG_MAL "Cannot allocate memory\n"
 
+
 typedef struct s_philostruct
 {
-	int				pos;
-	int				meal_count;
-	pthread_t		thread;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
+	int					pos;
+	int					meal_count;
+	pthread_t			thread;
+	pthread_mutex_t		l_fork;
+	pthread_mutex_t		r_fork;
+	struct s_datastruct	*datainfos;
 }	t_philostruct;
 
 typedef struct s_datastruct
@@ -45,12 +47,16 @@ typedef struct s_datastruct
 	int				t_to_eat;
 	int				t_to_sleep;
 	int				min_meal;
+	unsigned int	starttime;
 }	t_datastruct;
 
+void	*routine(void *philostruct);
 
 /*Init*/
 int		check_args(char **argv);
 int		init_datastruct(t_datastruct *data, char **argv);
+int		init_philosophers(t_datastruct *data);
+
 
 /*Manage error*/
 int		err_msg(char *msg);
@@ -58,5 +64,9 @@ int		err_msg(char *msg);
 /*Utils*/
 long	ft_atoi(const char *str);
 int		ft_strlen(char *s);
+
+/*Time*/
+unsigned long	ft_get_time();
+void	ft_usleep(unsigned long duration);
 
 #endif

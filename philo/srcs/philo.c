@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:48:49 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/26 15:51:39 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/26 18:23:36 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,50 +27,6 @@ void	*routine(void *philostruct)
 	return (NULL);
 }
 
-unsigned long	ft_get_time()
-{
-	struct timeval tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
-void	ft_usleep(unsigned long duration)
-{
-	unsigned long	starttime;
-
-	starttime = ft_get_time();
-	while (1)
-	{
-		if (ft_get_time() - starttime >= duration)
-			break;
-	}
-}
-
-void	print_time()
-{
-	// unsigned long start = 0;
-	// unsigned long end = 0;
-	unsigned long startperso = 0;
-	unsigned long endperso = 0;
-
-	// start = ft_get_time();
-	// printf("%lu\n", start);
-	// usleep(3000);
-	// end = ft_get_time();
-	// printf("%lu\n", end);
-
-
-	startperso = ft_get_time();
-	printf("%lu\n", startperso);
-	ft_usleep(0);
-	endperso = ft_get_time();
-	printf("%lu\n\n", endperso);
-
-	//printf("result usleep : %lu milliseconde\n", end - start);
-	printf("result ft_usleep : %lu milliseconde\n", endperso - startperso);
-}
-
 int	main(int argc, char **argv)
 {
 	t_datastruct	data;
@@ -83,8 +39,11 @@ int	main(int argc, char **argv)
 		return (err_msg(ERR_MSG_MAL), EXIT_FAILURE);
 	if (data.min_meal == 0)
 		return (EXIT_SUCCESS);
+	init_philosophers(&data);
+	free(data.ph);
+	return (EXIT_SUCCESS);
+}
 
-	print_time();
 	// int i = 0;
 	// while (i < data.n_philo)
 	// {
@@ -98,9 +57,6 @@ int	main(int argc, char **argv)
 	// 	pthread_join(data.ph[i].thread, NULL);
 	// 	i++;
 	// }
-	free(data.ph);
-	return (EXIT_SUCCESS);
-}
 
 
 // int	main(int argc, char **argv)
