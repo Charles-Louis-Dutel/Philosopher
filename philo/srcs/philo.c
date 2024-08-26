@@ -6,54 +6,69 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:48:49 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/22 17:55:21 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/26 15:51:39 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// void	*routine(void* philostruct)
-// {
-// 	t_philostruct	*philo;
-
-// 	philo = philostruct;
-// 	int i = 0;
-// 	while (i < 1000000)
-// 	{
-// 		philo->to_increment++;
-// 		i++;
-// 	}
-// 	return (NULL);
-// }
-
-
-int	check_args(char **argv)
+void	*routine(void *philostruct)
 {
-	int (i) = 1;
-	long (j) = 0;
-	while (argv[i])
+	t_philostruct	*philo;
+
+	philo = philostruct;
+	printf("philo number %d\n", philo->pos);
+	// int i = 0;
+	// while (i < 1000000)
+	// {
+	// 	philo->to_increment++;
+	// 	i++;
+	// }
+	return (NULL);
+}
+
+unsigned long	ft_get_time()
+{
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	ft_usleep(unsigned long duration)
+{
+	unsigned long	starttime;
+
+	starttime = ft_get_time();
+	while (1)
 	{
-		j = 0;
-		while (argv[i][j])
-		{
-			if (!(argv[i][j] >= 48 && argv[i][j] <= 57))
-			{
-				printf("%s%s", argv[i], ERR_MSG_NUM);
-				return (-1);
-			}
-			j++;
-		}
-		i++;
+		if (ft_get_time() - starttime >= duration)
+			break;
 	}
-	i = 1;
-	while (argv[i])
-	{
-		j = ft_atoi(argv[i]);
-		if (!(j >= 0 && j <= 2147483647))
-			return (printf("%s%s", argv[i], ERR_MSG_INT), -1);
-		i++;
-	}
-	return (0);
+}
+
+void	print_time()
+{
+	// unsigned long start = 0;
+	// unsigned long end = 0;
+	unsigned long startperso = 0;
+	unsigned long endperso = 0;
+
+	// start = ft_get_time();
+	// printf("%lu\n", start);
+	// usleep(3000);
+	// end = ft_get_time();
+	// printf("%lu\n", end);
+
+
+	startperso = ft_get_time();
+	printf("%lu\n", startperso);
+	ft_usleep(0);
+	endperso = ft_get_time();
+	printf("%lu\n\n", endperso);
+
+	//printf("result usleep : %lu milliseconde\n", end - start);
+	printf("result ft_usleep : %lu milliseconde\n", endperso - startperso);
 }
 
 int	main(int argc, char **argv)
@@ -64,10 +79,26 @@ int	main(int argc, char **argv)
 		return (err_msg(ERR_MSG_ARGS), EXIT_FAILURE);
 	if (check_args(argv) == -1)
 		return (EXIT_FAILURE);
-	if (init_datastruct(&data, argv) == EXIT_FAILURE);
+	if (init_datastruct(&data, argv) == EXIT_FAILURE)
 		return (err_msg(ERR_MSG_MAL), EXIT_FAILURE);
 	if (data.min_meal == 0)
 		return (EXIT_SUCCESS);
+
+	print_time();
+	// int i = 0;
+	// while (i < data.n_philo)
+	// {
+	// 	data.ph[i].pos = i;
+	// 	pthread_create(&(data).ph[i].thread, NULL, &routine, &(data).ph[i]);
+	// 	i++;
+	// }
+	// i = 0;
+	// while (i < data.n_philo)
+	// {
+	// 	pthread_join(data.ph[i].thread, NULL);
+	// 	i++;
+	// }
+	free(data.ph);
 	return (EXIT_SUCCESS);
 }
 

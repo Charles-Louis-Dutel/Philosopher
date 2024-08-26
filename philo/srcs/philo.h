@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/22 17:00:43 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/26 14:36:55 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_datastruct
 
 
 /*Init*/
+int		check_args(char **argv);
 int		init_datastruct(t_datastruct *data, char **argv);
 
 /*Manage error*/
