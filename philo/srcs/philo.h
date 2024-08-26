@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/26 18:29:37 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/26 18:50:46 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int		err_msg(char *msg);
 /*Utils*/
 long	ft_atoi(const char *str);
 int		ft_strlen(char *s);
+
+/*Routine*/
+void	*routine(void *philostruct);
 
 /*Time*/
 unsigned long	ft_get_time();

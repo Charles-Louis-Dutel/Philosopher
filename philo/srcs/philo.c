@@ -6,26 +6,11 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:48:49 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/26 18:23:36 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/26 18:50:13 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*routine(void *philostruct)
-{
-	t_philostruct	*philo;
-
-	philo = philostruct;
-	printf("philo number %d\n", philo->pos);
-	// int i = 0;
-	// while (i < 1000000)
-	// {
-	// 	philo->to_increment++;
-	// 	i++;
-	// }
-	return (NULL);
-}
 
 int	main(int argc, char **argv)
 {
