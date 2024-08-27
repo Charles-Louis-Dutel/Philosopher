@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/27 14:53:33 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:27:03 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	init_philosophers(t_datastruct *data)
 	while (i < data->n_philo)
 	{
 		data->ph[i].datainfos = data;
+		data->ph[i].both_fork = 0;
 		data->ph[i].pos = i + 1;
 		data->ph[i].meal_count = 0;
 		data->ph[i].r_fork = NULL;

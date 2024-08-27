@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/27 14:44:12 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:25:57 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat
 
 typedef struct s_philostruct
 {
+	int					both_fork;
 	int					pos;
 	int					meal_count;
 	pthread_t			thread;
@@ -47,7 +48,7 @@ typedef struct s_datastruct
 	int				t_to_eat;
 	int				t_to_sleep;
 	int				min_meal;
-	unsigned int	starttime;
+	unsigned long	starttime;
 }	t_datastruct;
 
 void	*routine(void *philostruct);
@@ -64,6 +65,7 @@ int		err_msg(char *msg);
 /*Utils*/
 long	ft_atoi(const char *str);
 int		ft_strlen(char *s);
+void	print_infos(t_philostruct *philo, char *msg);
 
 /*Routine*/
 void	*routine(void *philostruct);

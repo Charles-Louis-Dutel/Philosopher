@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:25:18 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/21 09:37:10 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:24:49 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,17 @@ int	ft_strlen(char *s)
 	while(s[i])
 		i++;
 	return (i);
+}
+
+void	print_infos(t_philostruct *philo, char *msg)
+{
+	unsigned long	time;
+
+	time = 0;
+	time = ft_get_time() - philo->datainfos->starttime;
+	if (pthread_mutex_lock(&philo->datainfos->print) == 0)
+	{
+		printf("%lu philo number %d %s", time, philo->pos, msg);
+		pthread_mutex_unlock(&philo->datainfos->print);
+	}
 }
