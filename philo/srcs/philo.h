@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/26 18:50:46 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/27 14:44:12 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_philostruct
 	int					meal_count;
 	pthread_t			thread;
 	pthread_mutex_t		l_fork;
-	pthread_mutex_t		r_fork;
+	pthread_mutex_t		*r_fork;
 	struct s_datastruct	*datainfos;
 }	t_philostruct;
 
