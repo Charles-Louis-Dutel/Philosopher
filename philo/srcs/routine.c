@@ -6,54 +6,72 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 18:46:42 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/27 15:44:50 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/30 11:55:28 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	taking_forks(t_philostruct	*philo)
+int	check_to_continue(t_philostruct *philo)
+{
+	if (pthread_mutex_lock(&philo->mut_stop) == 0)
+	{
+		if (philo->stop == 1)
+		{
+			pthread_mutex_unlock(&philo->mut_stop);
+			return (1);
+		}
+		pthread_mutex_unlock(&philo->mut_stop);
+	}
+	return (0);
+}
+
+static int	taking_forks(t_philostruct	*philo)
 {
 	if (philo->pos % 2 == 0)
 	{
 		if (pthread_mutex_lock(&philo->l_fork) == 0)
 		{
-			print_infos(philo, "has taken his l_fork\n");
-			philo->both_fork++;
+			if (print_infos(philo, "has taken his l_fork\n") == 1)
+				return (pthread_mutex_unlock(&philo->l_fork), 1);
 		}
 		if (pthread_mutex_lock(philo->r_fork) == 0)
 		{
-			print_infos(philo, "has taken his r_fork\n");
-			philo->both_fork++;
+			if (print_infos(philo, "has taken his r_fork\n") == 1)
+				return (pthread_mutex_unlock(&philo->l_fork), pthread_mutex_unlock(philo->r_fork), 1);
 		}
 	}
 	else
 	{
 		if (pthread_mutex_lock(philo->r_fork) == 0)
 		{
-			print_infos(philo, "has taken his r_fork\n");
-			philo->both_fork++;
+			if (print_infos(philo, "has taken his r_fork\n") == 1)
+				return (pthread_mutex_unlock(philo->r_fork), 1);
 		}
 		if (pthread_mutex_lock(&philo->l_fork) == 0)
 		{
-			print_infos(philo, "has taken his l_fork\n");
-			philo->both_fork++;
+			if (print_infos(philo, "has taken his l_fork\n") == 1)
+				return (pthread_mutex_unlock(philo->r_fork), pthread_mutex_unlock(&philo->l_fork), 1);
 		}
 	}
-
+	return (0);
 }
 
-static void	eating(t_philostruct *philo)
+static int	eating(t_philostruct *philo)
 {
-	if (philo->both_fork == 2)
+	if (print_infos(philo, "is eating\n") == 1)
+		return (1);
+	philo->meal_count++;
+	if (pthread_mutex_lock(&philo->mut_last_meal) == 0)
 	{
-		print_infos(philo, "is eating\n");
-		philo->meal_count++;
-		ft_usleep(philo->datainfos->t_to_eat);
-		pthread_mutex_unlock(&philo->l_fork);
-		pthread_mutex_unlock(philo->r_fork);
-		philo->both_fork = 0;
+		philo->last_meal = ft_get_time();
+		pthread_mutex_unlock(&philo->mut_last_meal);
 	}
+	ft_usleep(philo->datainfos->t_to_eat);
+	pthread_mutex_unlock(&philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+	philo->both_fork = 0;
+	return (0);
 }
 
 void	*routine(void *philostruct)
@@ -63,11 +81,16 @@ void	*routine(void *philostruct)
 	philo = philostruct;
 	while (1)
 	{
-		taking_forks(philo);
-		eating(philo);
-		print_infos(philo, "is sleeping\n");
+		if (taking_forks(philo) == 1)
+			break;
+		if (eating(philo) == 1)
+			break;
+		if (print_infos(philo, "is sleeping\n") == 1)
+			break;
 		ft_usleep(philo->datainfos->t_to_sleep);
-		print_infos(philo, "is thinking\n");
+		if (print_infos(philo, "is thinking\n") == 1)
+			break;
 	}
+	printf("philo num %d end\n", philo->pos);
 	return (NULL);
 }

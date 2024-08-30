@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:48:49 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/26 18:50:13 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/29 16:38:00 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,22 @@
 
 int	main(int argc, char **argv)
 {
-	t_datastruct	data;
+	t_datastruct	*data;
 
 	if (argc < 5 || argc > 6)
 		return (err_msg(ERR_MSG_ARGS), EXIT_FAILURE);
 	if (check_args(argv) == -1)
 		return (EXIT_FAILURE);
-	if (init_datastruct(&data, argv) == EXIT_FAILURE)
+	data = malloc(sizeof(t_datastruct));
+	if (!data)
 		return (err_msg(ERR_MSG_MAL), EXIT_FAILURE);
-	if (data.min_meal == 0)
+	if (init_datastruct(data, argv) == EXIT_FAILURE)
+		return (err_msg(ERR_MSG_MAL), EXIT_FAILURE);
+	if (data->min_meal == 0)
 		return (EXIT_SUCCESS);
-	init_philosophers(&data);
-	free(data.ph);
+	init_philosophers(data);
+	free(data->ph);
+	free(data);
 	return (EXIT_SUCCESS);
 }
 

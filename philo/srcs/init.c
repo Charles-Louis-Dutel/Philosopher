@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/27 15:27:03 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/30 11:40:28 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,36 @@ int	init_philosophers(t_datastruct *data)
 	{
 		data->ph[i].datainfos = data;
 		data->ph[i].both_fork = 0;
+		data->ph[i].stop = 0;
 		data->ph[i].pos = i + 1;
 		data->ph[i].meal_count = 0;
+		data->ph[i].last_meal = ft_get_time();
 		data->ph[i].r_fork = NULL;
+		pthread_mutex_init(&data->ph[i].mut_last_meal, NULL);
+		pthread_mutex_init(&data->ph[i].mut_stop, NULL);
 		pthread_mutex_init(&data->ph[i].l_fork, NULL);
 		if (i == 0)
 			data->ph[i].r_fork = &data->ph[data->n_philo - 1].l_fork;
 		else
 			data->ph[i].r_fork = &data->ph[i - 1].l_fork;
+		//printf("philo num %d, l_fork : %p, r_fork : %p\n", i, &data->ph[i].l_fork, data->ph[i].r_fork);
+		//pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
+		i++;
+	}
+	pthread_create(&data->death_checker, NULL, &check_death, data);
+	i = 0;
+	while (i < data->n_philo)
+	{
 		pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
 		i++;
 	}
+	//pthread_create(&data->death_checker, NULL, &check_death, data);
 	i = 0;
 	while (i < data->n_philo)
 	{
 		pthread_join(data->ph[i].thread, NULL);
 		i++;
 	}
+	pthread_join(data->death_checker, NULL);
 	return (EXIT_SUCCESS);
 }
