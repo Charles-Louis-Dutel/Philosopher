@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 11:20:39 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/30 15:01:36 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,13 @@ typedef struct s_datastruct
 	t_philostruct	*ph;
 	pthread_t		death_checker;
 	pthread_mutex_t	print;
+	pthread_mutex_t	mut_min_meal;
 	int				n_philo;
 	int				t_to_die;
 	int				t_to_eat;
 	int				t_to_sleep;
 	int				min_meal;
+	int				min_meal_check;
 	unsigned long	starttime;
 }	t_datastruct;
 

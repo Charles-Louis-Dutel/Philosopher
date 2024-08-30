@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 11:40:28 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/30 16:03:31 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	init_datastruct(t_datastruct *data, char **argv)
 	data->t_to_eat = ft_atoi(argv[3]);
 	data->t_to_sleep = ft_atoi(argv[4]);
 	data->min_meal = -1;
+	data->min_meal_check = 0;
 	if (argv[5])
 	{
 		data->min_meal = ft_atoi(argv[5]);
@@ -58,13 +59,13 @@ int	init_datastruct(t_datastruct *data, char **argv)
 	if (!data->ph)
 		return (EXIT_FAILURE);
 	pthread_mutex_init(&data->print, NULL);
+	pthread_mutex_init(&data->mut_min_meal, NULL);
 	return (EXIT_SUCCESS);
 }
 
 int	init_philosophers(t_datastruct *data)
 {
 	int i = 0;
-	data->starttime = ft_get_time();
 	while (i < data->n_philo)
 	{
 		data->ph[i].datainfos = data;
@@ -85,6 +86,7 @@ int	init_philosophers(t_datastruct *data)
 		//pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
 		i++;
 	}
+	data->starttime = ft_get_time();
 	pthread_create(&data->death_checker, NULL, &check_death, data);
 	i = 0;
 	while (i < data->n_philo)

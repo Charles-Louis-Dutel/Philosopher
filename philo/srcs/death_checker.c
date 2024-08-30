@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 14:10:59 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 11:38:53 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/30 15:33:41 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,19 @@ void	*check_death(void *datastruct)
 	data = datastruct;
 	while (1)
 	{
+		if (pthread_mutex_lock(&data->mut_min_meal) == 0)
+		{
+			if (data->min_meal_check >= data->n_philo)
+				return (pthread_mutex_unlock(&data->mut_min_meal), NULL);;
+			pthread_mutex_unlock(&data->mut_min_meal);
+		}
 		i = 0;
 		while (i < data->n_philo)
 		{
 			if (pthread_mutex_lock(&data->ph[i].mut_last_meal) == 0)
 			{
 				checker = ft_get_time();
-				if (checker - data->ph[i].last_meal >= (unsigned long)data->t_to_die)
+				if (checker - data->ph[i].last_meal >= (unsigned long)data->t_to_die || data->n_philo < 2)
 				{
 					death_msg(data, checker, i + 1);
 					change_signal_stop(data);

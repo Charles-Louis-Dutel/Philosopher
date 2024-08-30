@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:25:18 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 11:20:28 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/30 15:53:22 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ int	print_infos(t_philostruct *philo, char *msg)
 	{
 		if (check_to_continue(philo) == 1)
 			return (pthread_mutex_unlock(&philo->datainfos->print), 1);
-		printf("%lu %d %s", time, philo->pos, msg);
+		if (strcmp(msg, "is eating\n") == 0)
+			printf("%lu %d is eating %d\n", time, philo->pos, philo->meal_count + 1);
+		else
+			printf("%lu %d %s", time, philo->pos, msg);
 		pthread_mutex_unlock(&philo->datainfos->print);
 	}
 	return (0);
