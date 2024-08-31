@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 18:46:42 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 15:46:23 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/08/31 15:17:44 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	check_to_continue(t_philostruct *philo)
 	}
 	if (pthread_mutex_lock(&philo->datainfos->mut_min_meal) == 0)
 	{
-		if (philo->datainfos->min_meal_check == philo->datainfos->n_philo)
+		if (philo->datainfos->min_meal_check >= philo->datainfos->n_philo)
 		{
 			pthread_mutex_unlock(&philo->datainfos->mut_min_meal);
 			return (1);
