@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 15:01:36 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/09 18:52:29 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat
 
 typedef struct s_philostruct
 {
-	int					both_fork;
 	int					pos;
 	int					meal_count;
+	int					dead;
 	int					stop;
 	unsigned long		last_meal;
 	pthread_t			thread;
-	pthread_mutex_t		mut_last_meal;
+	pthread_mutex_t		mut_is_ph_dead;
 	pthread_mutex_t		mut_stop;
 	pthread_mutex_t		l_fork;
 	pthread_mutex_t		*r_fork;
@@ -49,6 +49,7 @@ typedef struct s_datastruct
 	pthread_t		death_checker;
 	pthread_mutex_t	print;
 	pthread_mutex_t	mut_min_meal;
+	pthread_mutex_t	mut_start;
 	int				n_philo;
 	int				t_to_die;
 	int				t_to_eat;
@@ -73,11 +74,14 @@ int		err_msg(char *msg);
 
 /*Utils*/
 long	ft_atoi(const char *str);
+void	ft_bzero(void *s, size_t n);
 int		ft_strlen(char *s);
-int		print_infos(t_philostruct *philo, char *msg);
+int		print_infos(t_philostruct *philo, char *msg, unsigned long time);
 
 /*Routine*/
 void	*routine(void *philostruct);
+
+/*Routine control*/
 int		check_to_continue(t_philostruct *philo);
 
 /*Time*/

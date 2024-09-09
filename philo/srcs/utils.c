@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:25:18 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 15:53:22 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/09 18:35:44 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,32 @@ long	ft_atoi(const char *str)
 int	ft_strlen(char *s)
 {
 	int (i) = 0;
-	while(s[i])
+	while (s[i])
 		i++;
 	return (i);
 }
 
-int	print_infos(t_philostruct *philo, char *msg)
+void	ft_bzero(void *s, size_t n)
 {
-	unsigned long	time;
+	char			*str;
+	unsigned long	i;
 
-	time = 0;
-	time = ft_get_time() - philo->datainfos->starttime;
+	i = 0;
+	str = s;
+	while (i < n)
+	{
+		str[i] = '\0';
+		i++;
+	}
+}
+
+int	print_infos(t_philostruct *philo, char *msg, unsigned long time)
+{
 	if (pthread_mutex_lock(&philo->datainfos->print) == 0)
 	{
 		if (check_to_continue(philo) == 1)
 			return (pthread_mutex_unlock(&philo->datainfos->print), 1);
-		if (strcmp(msg, "is eating\n") == 0)
-			printf("%lu %d is eating %d\n", time, philo->pos, philo->meal_count + 1);
-		else
-			printf("%lu %d %s", time, philo->pos, msg);
+		printf("%lu %d %s", time, philo->pos, msg);
 		pthread_mutex_unlock(&philo->datainfos->print);
 	}
 	return (0);

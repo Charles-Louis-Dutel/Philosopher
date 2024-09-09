@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/30 16:03:31 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/09 23:22:02 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,41 +60,43 @@ int	init_datastruct(t_datastruct *data, char **argv)
 		return (EXIT_FAILURE);
 	pthread_mutex_init(&data->print, NULL);
 	pthread_mutex_init(&data->mut_min_meal, NULL);
+	pthread_mutex_init(&data->mut_start, NULL);
 	return (EXIT_SUCCESS);
 }
 
 int	init_philosophers(t_datastruct *data)
 {
-	int i = 0;
+	int (i) = 0;
 	while (i < data->n_philo)
 	{
+		ft_bzero(&data->ph[i], sizeof(t_philostruct));
 		data->ph[i].datainfos = data;
-		data->ph[i].both_fork = 0;
-		data->ph[i].stop = 0;
 		data->ph[i].pos = i + 1;
-		data->ph[i].meal_count = 0;
 		data->ph[i].last_meal = ft_get_time();
 		data->ph[i].r_fork = NULL;
-		pthread_mutex_init(&data->ph[i].mut_last_meal, NULL);
 		pthread_mutex_init(&data->ph[i].mut_stop, NULL);
 		pthread_mutex_init(&data->ph[i].l_fork, NULL);
 		if (i == 0)
 			data->ph[i].r_fork = &data->ph[data->n_philo - 1].l_fork;
 		else
 			data->ph[i].r_fork = &data->ph[i - 1].l_fork;
-		//printf("philo num %d, l_fork : %p, r_fork : %p\n", i, &data->ph[i].l_fork, data->ph[i].r_fork);
-		//pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
 		i++;
 	}
-	data->starttime = ft_get_time();
-	pthread_create(&data->death_checker, NULL, &check_death, data);
-	i = 0;
-	while (i < data->n_philo)
+	if (pthread_mutex_lock(&data->mut_start) == 0)
 	{
-		pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
-		i++;
+		i = 0;
+		while (i < data->n_philo)
+		{
+			pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
+			i++;
+			if (i == data->n_philo)
+			{
+				data->starttime = ft_get_time();
+				pthread_create(&data->death_checker, NULL, &check_death, data);
+				pthread_mutex_unlock(&data->mut_start);
+			}
+		}
 	}
-	//pthread_create(&data->death_checker, NULL, &check_death, data);
 	i = 0;
 	while (i < data->n_philo)
 	{
