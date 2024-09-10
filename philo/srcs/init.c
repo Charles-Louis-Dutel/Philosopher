@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/10 19:56:31 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/10 22:34:04 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ int	init_datastruct(t_datastruct *data, char **argv)
 static void	create_threads(t_datastruct *data)
 {
 	int (i) = 0;
-	data->starttime = ft_get_time();
+	data->start = ft_get_time();
+	data->starttime = data->start + 100;
 	pthread_create(&data->death_check, NULL, &check_death, data);
 	while (i < data->n_philo)
 	{

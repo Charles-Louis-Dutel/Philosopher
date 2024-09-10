@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/10 19:29:47 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/10 22:31:43 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_datastruct
 	int				t_to_sleep;
 	int				min_meal;
 	int				min_meal_reach;
+	unsigned long	start;
 	unsigned long	starttime;
 }	t_datastruct;
 
