@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/09 18:52:29 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/10 19:29:47 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,46 +46,45 @@ typedef struct s_philostruct
 typedef struct s_datastruct
 {
 	t_philostruct	*ph;
-	pthread_t		death_checker;
-	pthread_mutex_t	print;
+	pthread_t		death_check;
+	pthread_mutex_t	mut_print;
 	pthread_mutex_t	mut_min_meal;
-	pthread_mutex_t	mut_start;
 	int				n_philo;
 	int				t_to_die;
 	int				t_to_eat;
 	int				t_to_sleep;
 	int				min_meal;
-	int				min_meal_check;
+	int				min_meal_reach;
 	unsigned long	starttime;
 }	t_datastruct;
 
-void	*routine(void *philostruct);
+void			*routine(void *philostruct);
 
 /*Death checker*/
-void	*check_death(void *data);
+void			*check_death(void *data);
 
 /*Init*/
-int		check_args(char **argv);
-int		init_datastruct(t_datastruct *data, char **argv);
-int		init_philosophers(t_datastruct *data);
+int				check_args(char **argv);
+int				init_datastruct(t_datastruct *data, char **argv);
+int				init_philosophers(t_datastruct *data);
 
 /*Manage error*/
-int		err_msg(char *msg);
+int				err_msg(char *msg);
 
 /*Utils*/
-long	ft_atoi(const char *str);
-void	ft_bzero(void *s, size_t n);
-int		ft_strlen(char *s);
-int		print_infos(t_philostruct *philo, char *msg, unsigned long time);
+long			ft_atoi(const char *str);
+void			ft_bzero(void *s, size_t n);
+int				ft_strlen(char *s);
+int				print_infos(t_philostruct *philo, char *msg, int n);
 
 /*Routine*/
-void	*routine(void *philostruct);
+void			*routine(void *philostruct);
 
 /*Routine control*/
-int		check_to_continue(t_philostruct *philo);
+int				check_to_continue(t_philostruct *philo);
 
 /*Time*/
-unsigned long	ft_get_time();
-void	ft_usleep(unsigned long duration);
+unsigned long	ft_get_time(void);
+void			ft_msleep(unsigned long duration);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 15:59:26 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/08 22:04:41 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/10 19:14:21 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@ unsigned long	ft_get_time(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	ft_usleep(unsigned long duration)
+void	ft_msleep(unsigned long duration)
 {
 	unsigned long	starttime;
 
 	starttime = ft_get_time();
-	while (1)
+	while ((ft_get_time() - starttime) < duration)
 	{
-		if (ft_get_time() - starttime >= duration)
-			break ;
+		usleep(duration / 100);
 	}
 }

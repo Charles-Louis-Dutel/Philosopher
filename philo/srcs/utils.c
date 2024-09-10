@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:25:18 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/09 18:35:44 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/10 19:36:47 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,23 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-int	print_infos(t_philostruct *philo, char *msg, unsigned long time)
+int	print_infos(t_philostruct *philo, char *msg, int n)
 {
-	if (pthread_mutex_lock(&philo->datainfos->print) == 0)
-	{
-		if (check_to_continue(philo) == 1)
-			return (pthread_mutex_unlock(&philo->datainfos->print), 1);
+	unsigned long (time) = 0;
+	pthread_mutex_lock(&philo->datainfos->mut_print);
+	if (check_to_continue(philo) == 1)
+		return (pthread_mutex_unlock(&philo->datainfos->mut_print), 1);
+	time = ft_get_time() - philo->datainfos->starttime;
+	if (n == 1)
 		printf("%lu %d %s", time, philo->pos, msg);
-		pthread_mutex_unlock(&philo->datainfos->print);
+	else if (n == 2)
+	{
+		while (n > 0)
+		{
+			printf("%lu %d %s", time, philo->pos, msg);
+			n--;
+		}
 	}
+	pthread_mutex_unlock(&philo->datainfos->mut_print);
 	return (0);
 }

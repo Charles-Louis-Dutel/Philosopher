@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:48:49 by cdutel            #+#    #+#             */
-/*   Updated: 2024/08/29 16:38:00 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/10 17:30:46 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	main(int argc, char **argv)
 	init_philosophers(data);
 	free(data->ph);
 	free(data);
+	//printf("\n\nEND\n");
 	return (EXIT_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/09 23:22:02 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/10 19:56:31 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	init_datastruct(t_datastruct *data, char **argv)
 	data->t_to_eat = ft_atoi(argv[3]);
 	data->t_to_sleep = ft_atoi(argv[4]);
 	data->min_meal = -1;
-	data->min_meal_check = 0;
 	if (argv[5])
 	{
 		data->min_meal = ft_atoi(argv[5]);
@@ -58,10 +57,40 @@ int	init_datastruct(t_datastruct *data, char **argv)
 	data->ph = malloc(sizeof(t_philostruct) * data->n_philo);
 	if (!data->ph)
 		return (EXIT_FAILURE);
-	pthread_mutex_init(&data->print, NULL);
+	pthread_mutex_init(&data->mut_print, NULL);
 	pthread_mutex_init(&data->mut_min_meal, NULL);
-	pthread_mutex_init(&data->mut_start, NULL);
 	return (EXIT_SUCCESS);
+}
+
+static void	create_threads(t_datastruct *data)
+{
+	int (i) = 0;
+	data->starttime = ft_get_time();
+	pthread_create(&data->death_check, NULL, &check_death, data);
+	while (i < data->n_philo)
+	{
+		pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
+		i++;
+	}
+}
+
+static void	join_threads(t_datastruct *data)
+{
+	int (i) = 0;
+	while (i < data->n_philo)
+	{
+		pthread_join(data->ph[i].thread, NULL);
+		i++;
+	}
+	pthread_join(data->death_check, NULL);
+
+	pthread_mutex_destroy(&data->mut_print);
+	i = 0;
+	while (i < data->n_philo)
+	{
+		pthread_mutex_destroy(&data->ph[i].l_fork);
+		i++;
+	}
 }
 
 int	init_philosophers(t_datastruct *data)
@@ -74,6 +103,7 @@ int	init_philosophers(t_datastruct *data)
 		data->ph[i].pos = i + 1;
 		data->ph[i].last_meal = ft_get_time();
 		data->ph[i].r_fork = NULL;
+		pthread_mutex_init(&data->ph[i].mut_is_ph_dead, NULL);
 		pthread_mutex_init(&data->ph[i].mut_stop, NULL);
 		pthread_mutex_init(&data->ph[i].l_fork, NULL);
 		if (i == 0)
@@ -82,27 +112,7 @@ int	init_philosophers(t_datastruct *data)
 			data->ph[i].r_fork = &data->ph[i - 1].l_fork;
 		i++;
 	}
-	if (pthread_mutex_lock(&data->mut_start) == 0)
-	{
-		i = 0;
-		while (i < data->n_philo)
-		{
-			pthread_create(&data->ph[i].thread, NULL, &routine, &data->ph[i]);
-			i++;
-			if (i == data->n_philo)
-			{
-				data->starttime = ft_get_time();
-				pthread_create(&data->death_checker, NULL, &check_death, data);
-				pthread_mutex_unlock(&data->mut_start);
-			}
-		}
-	}
-	i = 0;
-	while (i < data->n_philo)
-	{
-		pthread_join(data->ph[i].thread, NULL);
-		i++;
-	}
-	pthread_join(data->death_checker, NULL);
+	create_threads(data);
+	join_threads(data);
 	return (EXIT_SUCCESS);
 }
