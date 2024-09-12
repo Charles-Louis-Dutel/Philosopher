@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death_checker.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 14:10:59 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/10 22:47:26 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/12 19:20:19 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,20 @@
 
 static void	death_msg(t_datastruct *data, unsigned long death, int philonum)
 {
-	pthread_mutex_lock(&data->mut_print);
-	printf("%lu %d died\n", death, philonum);
-	pthread_mutex_unlock(&data->mut_print);
+	if (pthread_mutex_lock(&data->mut_print) == 0)
+	{
+		printf("%lu %d died\n", death, philonum);
+		pthread_mutex_unlock(&data->mut_print);
+	}
+}
+
+static void	meal_reached_msg(t_datastruct *data)
+{
+	if (pthread_mutex_lock(&data->mut_print) == 0)
+	{
+		printf("All philosophers have eaten %d times\n", data->min_meal);
+		pthread_mutex_unlock(&data->mut_print);
+	}
 }
 
 static void	change_signal_stop(t_datastruct *data)
@@ -24,40 +35,56 @@ static void	change_signal_stop(t_datastruct *data)
 	int (i) = 0;
 	while (i < data->n_philo)
 	{
-		pthread_mutex_lock(&data->ph[i].mut_stop);
-		data->ph[i].stop = 1;
-		pthread_mutex_unlock(&data->ph[i].mut_stop);
+		if (pthread_mutex_lock(&data->ph[i].mut_stop) == 0)
+		{
+			data->ph[i].stop = 1;
+			pthread_mutex_unlock(&data->ph[i].mut_stop);
+		}
 		i++;
 	}
+}
+
+int	check_meal(t_datastruct *data)
+{
+	if (pthread_mutex_lock(&data->mut_is_meal_reached) == 0)
+	{
+		if (data->min_meal_reach == data->n_philo)
+		{
+			pthread_mutex_unlock(&data->mut_is_meal_reached);
+			change_signal_stop(data);
+			meal_reached_msg(data);
+			return (1);
+		}
+		pthread_mutex_unlock(&data->mut_is_meal_reached);
+	}
+	return (0);
 }
 
 void	*check_death(void *datastruct)
 {
 	t_datastruct	*data;
-	int				i;
-	//unsigned long	death_time;
+	int				time;
 
 	data = datastruct;
-	ft_msleep(data->n_philo);
+	while (ft_get_time() <= data->starttime)
+		ft_msleep(1);
 	while (1)
 	{
-		i = 0;
-		while (i < data->n_philo)
+		if (pthread_mutex_lock(&data->mut_is_ph_dead) == 0)
 		{
-			pthread_mutex_lock(&data->ph[i].mut_is_ph_dead);
-			if (data->ph[i].dead == 1)
+			if (data->dead > 0)
 			{
-				death_msg(data, ft_get_time() - data->starttime, i + 1);
+				pthread_mutex_unlock(&data->mut_is_ph_dead);
 				change_signal_stop(data);
-				return (change_signal_stop(data), pthread_mutex_unlock(&data->ph[i].mut_is_ph_dead), NULL);
+				time = ft_get_time() - data->starttime;
+				death_msg(data, time, data->dead);
+				return (NULL);
 			}
-			pthread_mutex_unlock(&data->ph[i].mut_is_ph_dead);
-			i++;
+			pthread_mutex_unlock(&data->mut_is_ph_dead);
+			ft_msleep(1);
 		}
-		pthread_mutex_lock(&data->mut_min_meal);
-		if (data->min_meal_reach >= data->n_philo)
-			return (change_signal_stop(data), pthread_mutex_unlock(&data->mut_min_meal), NULL);
-		pthread_mutex_unlock(&data->mut_min_meal);
+		if (data->min_meal > 0 && check_meal(data) == 1)
+			return (NULL);
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 15:59:26 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/10 19:14:21 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/12 16:16:11 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ unsigned long	ft_get_time(void)
 
 void	ft_msleep(unsigned long duration)
 {
-	unsigned long	starttime;
+	unsigned long	start;
 
-	starttime = ft_get_time();
-	while ((ft_get_time() - starttime) < duration)
+	start = ft_get_time();
+	while ((ft_get_time() - start) < duration)
 	{
 		usleep(duration / 100);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:25:18 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/10 19:36:47 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/12 16:15:30 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,35 @@ long	ft_atoi(const char *str)
 	return (nb * sign);
 }
 
+int	check_args(char **argv)
+{
+	int (i) = 1;
+	long (j) = 0;
+	while (argv[i])
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (!(argv[i][j] >= 48 && argv[i][j] <= 57))
+			{
+				printf("%s%s", argv[i], ERR_MSG_NUM);
+				return (-1);
+			}
+			j++;
+		}
+		i++;
+	}
+	i = 1;
+	while (argv[i])
+	{
+		j = ft_atoi(argv[i]);
+		if (!(j >= 0 && j <= 2147483647))
+			return (printf("%s%s", argv[i], ERR_MSG_INT), -1);
+		i++;
+	}
+	return (0);
+}
+
 int	ft_strlen(char *s)
 {
 	int (i) = 0;
@@ -62,20 +91,22 @@ void	ft_bzero(void *s, size_t n)
 int	print_infos(t_philostruct *philo, char *msg, int n)
 {
 	unsigned long (time) = 0;
-	pthread_mutex_lock(&philo->datainfos->mut_print);
-	if (check_to_continue(philo) == 1)
-		return (pthread_mutex_unlock(&philo->datainfos->mut_print), 1);
-	time = ft_get_time() - philo->datainfos->starttime;
-	if (n == 1)
-		printf("%lu %d %s", time, philo->pos, msg);
-	else if (n == 2)
+	if (pthread_mutex_lock(&philo->datainfos->mut_print) == 0)
 	{
-		while (n > 0)
-		{
+		if (check_to_continue(philo) == 1)
+			return (pthread_mutex_unlock(&philo->datainfos->mut_print), 1);
+		time = ft_get_time() - philo->datainfos->starttime;
+		if (n == 1)
 			printf("%lu %d %s", time, philo->pos, msg);
-			n--;
+		else if (n == 2)
+		{
+			while (n > 0)
+			{
+				printf("%lu %d %s", time, philo->pos, msg);
+				n--;
+			}
 		}
+		pthread_mutex_unlock(&philo->datainfos->mut_print);
 	}
-	pthread_mutex_unlock(&philo->datainfos->mut_print);
 	return (0);
 }
