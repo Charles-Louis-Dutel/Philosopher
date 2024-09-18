@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 18:46:42 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/18 16:13:36 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 16:20:26 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,14 @@ static void	wait_to_start(t_philostruct *philo)
 {
 	if (philo->datainfos->n_philo == 1)
 	{
-		ft_msleep(philo->datainfos->t_to_die);
-		return ;
+		if (pthread_mutex_lock(&philo->datainfos->mut_is_ph_dead) == 0)
+		{
+			philo->datainfos->dead = philo->pos;
+			philo->death_time = philo->datainfos->t_to_die;
+			ft_msleep(philo->datainfos->t_to_die);
+			pthread_mutex_unlock(&philo->datainfos->mut_is_ph_dead);
+			return ;
+		}
 	}
 	while (ft_get_time() <= philo->datainfos->starttime)
 		ft_msleep(1);
