@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -g3 -pthread -MMD #-fsanitize=thread
 
 ############################Sources########################
 SRCS_DIR = srcs/
-FILES = philo death_checker init manage_errors utils routine\
+FILES = philo death_checker init manage_errors utils routine_actions\
 		routine_control time
 
 SRCS = $(addprefix $(SRCS_DIR), $(FILES))

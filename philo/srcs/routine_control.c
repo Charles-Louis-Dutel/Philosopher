@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 18:51:35 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/18 17:05:02 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/19 00:38:25 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,19 @@ int	check_to_continue(t_philostruct *philo)
 	return (0);
 }
 
+void	set_dead_after_thinking(t_philostruct *philo)
+{
+	if (pthread_mutex_lock(&philo->datainfos->mut_is_ph_dead) == 0)
+	{
+		if (philo->datainfos->dead == 0)
+		{
+			philo->datainfos->dead = philo->pos;
+			philo->death_time = philo->datainfos->t_to_die;
+		}
+		pthread_mutex_unlock(&philo->datainfos->mut_is_ph_dead);
+	}
+}
+
 void	wait_to_start(t_philostruct *philo)
 {
 	if (philo->datainfos->n_philo == 1)
@@ -62,4 +75,33 @@ void	wait_to_start(t_philostruct *philo)
 	philo->last_meal = philo->datainfos->starttime;
 	if (philo->pos % 2 == 0)
 		ft_msleep(philo->datainfos->t_to_eat / 2);
+	if (philo->datainfos->n_philo % 2 != 0 && \
+	philo->pos == philo->datainfos->n_philo && \
+	philo->datainfos->t_to_eat > philo->datainfos->t_to_sleep)
+		ft_msleep(philo->datainfos->t_to_eat);
+}
+
+void	*routine(void *philostruct)
+{
+	t_philostruct	*philo;
+
+	philo = philostruct;
+	wait_to_start(philo);
+	if (philo->datainfos->n_philo == 1 && check_to_continue(philo) == 1)
+		return (NULL);
+	while (1)
+	{
+		if (taking_forks(philo) == 1)
+			break ;
+		if (eating(philo) == 1)
+			break ;
+		if (sleeping(philo) == 1)
+			break ;
+		ft_msleep(philo->datainfos->t_to_sleep);
+		if (thinking(philo) == 1)
+			break ;
+		if (philo->datainfos->t_to_eat * 2 > philo->datainfos->t_to_die)
+			return (set_dead_after_thinking(philo), NULL);
+	}
+	return (NULL);
 }

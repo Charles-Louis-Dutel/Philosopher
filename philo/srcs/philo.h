@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/18 17:20:42 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/19 00:39:38 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,18 @@ void			ft_bzero(void *s, size_t n);
 int				ft_strlen(char *s);
 int				print_infos(t_philostruct *philo, char *msg, int n);
 
-/*Routine*/
-void			*routine(void *philostruct);
+/*Routine actions*/
+int				philo_pair(t_philostruct *philo);
+int				taking_forks(t_philostruct *philo);
+int				eating(t_philostruct *philo);
+int				sleeping(t_philostruct *philo);
+int				thinking(t_philostruct *philo);
 
 /*Routine control*/
 int				check_to_continue(t_philostruct *philo);
+void			set_dead_after_thinking(t_philostruct *philo);
 void			wait_to_start(t_philostruct *philo);
+void			*routine(void *philostruct);
 
 /*Time*/
 unsigned long	ft_get_time(void);

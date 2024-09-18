@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                          :+:      :+:    :+:   */
+/*   routine_actions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 18:46:42 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/18 17:16:37 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/19 00:42:27 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	philo_pair(t_philostruct *philo)
+int	philo_pair(t_philostruct *philo)
 {
 	pthread_mutex_lock(&philo->l_fork);
 	pthread_mutex_lock(philo->r_fork);
@@ -25,7 +25,7 @@ static int	philo_pair(t_philostruct *philo)
 	return (0);
 }
 
-static int	taking_forks(t_philostruct *philo)
+int	taking_forks(t_philostruct *philo)
 {
 	if (philo->pos % 2 == 0)
 		return (philo_pair(philo));
@@ -36,7 +36,7 @@ static int	taking_forks(t_philostruct *philo)
 		{
 			if (ft_get_time() <= philo->last_meal + \
 			philo->datainfos->t_to_eat + philo->datainfos->t_to_sleep)
-				ft_msleep(10);
+				ft_msleep(1);
 		}
 		pthread_mutex_lock(philo->r_fork);
 		pthread_mutex_lock(&philo->l_fork);
@@ -50,7 +50,7 @@ static int	taking_forks(t_philostruct *philo)
 	return (0);
 }
 
-static int	eating(t_philostruct *philo)
+int	eating(t_philostruct *philo)
 {
 	philo->last_meal = ft_get_time();
 	if (print_infos(philo, MSG_EAT, 1) == 1)
@@ -74,7 +74,7 @@ static int	eating(t_philostruct *philo)
 	return (0);
 }
 
-static int	sleeping(t_philostruct *philo)
+int	sleeping(t_philostruct *philo)
 {
 	if ((ft_get_time() + (unsigned long)philo->datainfos->t_to_sleep) - \
 	philo->last_meal > (unsigned long)philo->datainfos->t_to_die)
@@ -96,25 +96,15 @@ static int	sleeping(t_philostruct *philo)
 	return (0);
 }
 
-void	*routine(void *philostruct)
+int	thinking(t_philostruct *philo)
 {
-	t_philostruct	*philo;
-
-	philo = philostruct;
-	wait_to_start(philo);
-	if (philo->datainfos->n_philo == 1 && check_to_continue(philo) == 1)
-		return (NULL);
-	while (1)
+	if (print_infos(philo, MSG_THINK, 1) == 1)
+		return (1);
+	if (philo->datainfos->n_philo % 2 != 0)
 	{
-		if (taking_forks(philo) == 1)
-			break ;
-		if (eating(philo) == 1)
-			break ;
-		if (sleeping(philo) == 1)
-			break ;
-		ft_msleep(philo->datainfos->t_to_sleep);
-		if (print_infos(philo, MSG_THINK, 1) == 1)
-			break ;
+		if (philo->datainfos->t_to_eat > philo->datainfos->t_to_sleep)
+			ft_msleep(philo->datainfos->t_to_eat - \
+			philo->datainfos->t_to_sleep);
 	}
-	return (NULL);
+	return (0);
 }
