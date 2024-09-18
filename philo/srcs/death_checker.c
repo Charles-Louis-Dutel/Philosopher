@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death_checker.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 14:10:59 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/12 19:20:19 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 16:01:04 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	*check_death(void *datastruct)
 			{
 				pthread_mutex_unlock(&data->mut_is_ph_dead);
 				change_signal_stop(data);
-				time = ft_get_time() - data->starttime;
+				time = data->ph[data->dead - 1].death_time;
 				death_msg(data, time, data->dead);
 				return (NULL);
 			}

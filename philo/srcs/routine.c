@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 18:46:42 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/18 14:46:52 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 16:13:36 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,26 @@ static int	eating(t_philostruct *philo)
 	return (0);
 }
 
+static int	sleeping(t_philostruct *philo)
+{
+	if ((ft_get_time() + (unsigned long)philo->datainfos->t_to_sleep) - philo->last_meal > (unsigned long)philo->datainfos->t_to_die)
+	{
+		if (pthread_mutex_lock(&philo->datainfos->mut_is_ph_dead) == 0)
+		{
+			if (philo->datainfos->dead == 0)
+			{
+				philo->datainfos->dead = philo->pos;
+				philo->death_time = ft_get_time() + ((unsigned long)philo->datainfos->t_to_die - ft_get_time());
+			}
+			pthread_mutex_unlock(&philo->datainfos->mut_is_ph_dead);
+			return (1);
+		}
+	}
+	if (print_infos(philo, "is sleeping\n", 1) == 1)
+		return (1);
+	return (0);
+}
+
 static void	wait_to_start(t_philostruct *philo)
 {
 	if (philo->datainfos->n_philo == 1)
@@ -89,7 +109,7 @@ void	*routine(void *philostruct)
 
 	philo = philostruct;
 	wait_to_start(philo);
-	if (check_to_continue(philo) == 1)
+	if (philo->datainfos->n_philo == 1 && check_to_continue(philo) == 1)
 		return (NULL);
 	while (1)
 	{
@@ -97,7 +117,7 @@ void	*routine(void *philostruct)
 			break ;
 		if (eating(philo) == 1)
 			break ;
-		if (print_infos(philo, "is sleeping\n", 1) == 1)
+		if (sleeping(philo) == 1)
 			break ;
 		ft_msleep(philo->datainfos->t_to_sleep);
 		if (print_infos(philo, "is thinking\n", 1) == 1)

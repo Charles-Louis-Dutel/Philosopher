@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/12 18:48:36 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 15:54:12 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_philostruct
 	int					meal_count;
 	int					stop;
 	unsigned long		last_meal;
+	unsigned long		death_time;
 	pthread_t			thread;
 	pthread_mutex_t		mut_stop;
 	pthread_mutex_t		l_fork;

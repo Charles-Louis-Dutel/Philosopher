@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/12 19:15:08 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 15:54:33 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	init_philosophers(t_datastruct *data)
 		data->ph[i].r_fork = NULL;
 		data->ph[i].meal_count = 0;
 		data->ph[i].stop = 0;
+		data->ph[i].death_time = 0;
 		pthread_mutex_init(&data->ph[i].mut_stop, NULL);
 		pthread_mutex_init(&data->ph[i].l_fork, NULL);
 		if (i == 0)

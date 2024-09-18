@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine_control.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 18:51:35 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/12 19:19:31 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 15:59:26 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ static int	check_last_meal_time(t_philostruct *philo)
 		if (pthread_mutex_lock(&philo->datainfos->mut_is_ph_dead) == 0)
 		{
 			if (philo->datainfos->dead == 0)
+			{
 				philo->datainfos->dead = philo->pos;
+				philo->death_time = ft_get_time() - philo->datainfos->starttime;
+			}
 			pthread_mutex_unlock(&philo->datainfos->mut_is_ph_dead);
 			return (1);
 		}
