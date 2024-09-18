@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdutel <cdutel@42student.fr>               +#+  +:+       +#+        */
+/*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 18:46:42 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/12 19:06:29 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 14:46:52 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ static int	taking_forks(t_philostruct	*philo)
 	}
 	else
 	{
+		if ((philo->pos == 1 || philo->pos == philo->datainfos->n_philo) && philo->datainfos->n_philo % 2 != 0)
+		{
+			if (ft_get_time() <= philo->last_meal + philo->datainfos->t_to_eat + philo->datainfos->t_to_sleep)
+				ft_msleep(10);
+		}
 		pthread_mutex_lock(philo->r_fork);
 		pthread_mutex_lock(&philo->l_fork);
 		if (print_infos(philo, "has taken a fork\n", 2) == 1)
