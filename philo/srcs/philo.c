@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:48:49 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/10 17:30:46 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 17:00:48 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,62 +30,5 @@ int	main(int argc, char **argv)
 	init_philosophers(data);
 	free(data->ph);
 	free(data);
-	//printf("\n\nEND\n");
 	return (EXIT_SUCCESS);
 }
-
-	// int i = 0;
-	// while (i < data.n_philo)
-	// {
-	// 	data.ph[i].pos = i;
-	// 	pthread_create(&(data).ph[i].thread, NULL, &routine, &(data).ph[i]);
-	// 	i++;
-	// }
-	// i = 0;
-	// while (i < data.n_philo)
-	// {
-	// 	pthread_join(data.ph[i].thread, NULL);
-	// 	i++;
-	// }
-
-
-// int	main(int argc, char **argv)
-// {
-// 	pthread_t		*ph;
-// 	t_datastruct	data;
-// 	t_philostruct	philo;
-
-// 	int (i) = 0;
-// 	if (argc == 5 || argc == 6)
-// 	{
-// 		if (argc < 5 || argc > 6)
-// 			return (err_msg(ERR_MSG_ARGS), EXIT_FAILURE);
-// 		if (check_args(argv) == -1)
-// 			return (EXIT_FAILURE);
-
-// 		init_datastruct(&data, argv);
-// 		printf("data.n_philo : %d\n", data.n_philo);
-
-// 		ph = malloc(sizeof(pthread_t) * data.n_philo);
-
-// 		philo.to_increment = 0;
-
-// 		/*Create threads*/
-// 		while (i < data.n_philo)
-// 		{
-// 			pthread_create(&ph[i], NULL, &routine, &philo);
-// 			i++;
-// 		}
-// 		i = 0;
-
-// 		/*Close threads*/
-// 		while (i < data.n_philo)
-// 		{
-// 			pthread_join(ph[i], NULL);
-// 			i++;
-// 		}
-// 		printf("res : %d\n", philo.to_increment);
-// 		free(ph);
-// 	}
-// 	return (0);
-// }

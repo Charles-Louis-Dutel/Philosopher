@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/18 15:54:33 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/18 17:00:16 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static void	join_threads(t_datastruct *data)
 		i++;
 	}
 	pthread_join(data->death_checker, NULL);
-
 	i = 0;
 	while (i < data->n_philo)
 	{
