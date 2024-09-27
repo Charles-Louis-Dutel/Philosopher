@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 18:46:42 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/19 00:42:27 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/27 12:05:33 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	sleeping(t_philostruct *philo)
 	if ((ft_get_time() + (unsigned long)philo->datainfos->t_to_sleep) - \
 	philo->last_meal > (unsigned long)philo->datainfos->t_to_die)
 	{
+		ft_msleep(10);
 		if (pthread_mutex_lock(&philo->datainfos->mut_is_ph_dead) == 0)
 		{
 			if (philo->datainfos->dead == 0)
