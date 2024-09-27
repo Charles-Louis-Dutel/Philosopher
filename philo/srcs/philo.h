@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/27 15:03:56 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/27 19:36:33 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@
 # define ERR_MSG_ARGS "Incorrect input: Retry with: ./philo number_of_philosophers \
 time_to_die time_to_eat time_to_sleep \
 [number_of_times_each_philosopher_must_eat]\n"
-# define ERR_MSG_PH_NUM "Maximum number of philos nead to be 200\n"
+# define ERR_MSG_PH_NUM "Maximum number of philos nead to be 200 or more \
+than 0\n"
 # define ERR_MSG_MEAL "Minimum number of meal nead to be 1\n"
+# define ERR_MSG_INP "Minimun for eat, sleep or die nead to be at least 60\n"
 # define ERR_MSG_INT ": argument must be between 0 and int max\n"
 # define ERR_MSG_NUM ": argument must contain only number\n"
 # define ERR_MSG_MAL "Cannot allocate memory\n"

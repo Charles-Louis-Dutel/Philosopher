@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:29:07 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/18 17:00:16 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/27 19:37:15 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 int	init_datastruct(t_datastruct *data, char **argv)
 {
 	data->n_philo = ft_atoi(argv[1]);
-	if (data->n_philo > 200)
+	if (data->n_philo < 1 || data->n_philo > 200)
 		return (err_msg(ERR_MSG_PH_NUM), 2);
 	data->t_to_die = ft_atoi(argv[2]);
 	data->t_to_eat = ft_atoi(argv[3]);
 	data->t_to_sleep = ft_atoi(argv[4]);
+	if (data->t_to_die < 60 || data->t_to_eat < 60 || data->t_to_sleep < 60)
+		return (err_msg(ERR_MSG_INP), 2);
 	data->min_meal = -1;
 	data->min_meal_reach = 0;
 	data->dead = 0;
