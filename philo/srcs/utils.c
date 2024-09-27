@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:25:18 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/27 13:23:58 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/27 15:03:00 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,20 @@ int	print_infos(t_philostruct *philo, char *msg, int n)
 		pthread_mutex_unlock(&philo->datainfos->mut_print);
 	}
 	return (0);
+}
+
+void	case_die_inf_eat(t_philostruct *philo)
+{
+	if (philo->datainfos->t_to_die < philo->datainfos->t_to_eat)
+	{
+		if (pthread_mutex_lock(&philo->datainfos->mut_is_ph_dead) == 0)
+		{
+			if (philo->datainfos->dead == 0)
+			{
+				philo->datainfos->dead = philo->pos;
+				philo->death_time = (unsigned long)philo->datainfos->t_to_die;
+			}
+			pthread_mutex_unlock(&philo->datainfos->mut_is_ph_dead);
+		}
+	}
 }

@@ -6,29 +6,11 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 14:10:59 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/27 13:21:59 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/27 14:59:01 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static void	death_msg(t_datastruct *data, unsigned long death, int philonum)
-{
-	if (pthread_mutex_lock(&data->mut_print) == 0)
-	{
-		printf("%lu %d died\n", death, philonum);
-		pthread_mutex_unlock(&data->mut_print);
-	}
-}
-
-static void	meal_reached_msg(t_datastruct *data)
-{
-	if (pthread_mutex_lock(&data->mut_print) == 0)
-	{
-		printf("All philosophers have eaten %d times\n", data->min_meal);
-		pthread_mutex_unlock(&data->mut_print);
-	}
-}
 
 static void	change_signal_stop(t_datastruct *data)
 {
@@ -60,11 +42,22 @@ int	check_meal(t_datastruct *data)
 	return (0);
 }
 
+static void	wait_time(t_datastruct *data)
+{
+	unsigned long	deathtime;
+	unsigned long	waittime;
+
+	deathtime = data->ph[data->dead - 1].death_time;
+	waittime = (ft_get_time() - data->starttime);
+	if (deathtime > waittime)
+		ft_msleep(deathtime - waittime);
+	change_signal_stop(data);
+	death_msg(data, deathtime, data->dead);
+}
+
 void	*check_death(void *datastruct)
 {
 	t_datastruct	*data;
-	unsigned long	deathtime;
-	unsigned long	waittime;
 
 	data = datastruct;
 	while (ft_get_time() <= data->starttime)
@@ -76,12 +69,7 @@ void	*check_death(void *datastruct)
 			if (data->dead > 0)
 			{
 				pthread_mutex_unlock(&data->mut_is_ph_dead);
-				deathtime = data->ph[data->dead - 1].death_time;
-				waittime = (ft_get_time() - data->starttime);
-				if (deathtime > waittime)
-					ft_msleep(deathtime - waittime);
-				change_signal_stop(data);
-				death_msg(data, deathtime, data->dead);
+				wait_time(data);
 				return (NULL);
 			}
 			pthread_mutex_unlock(&data->mut_is_ph_dead);

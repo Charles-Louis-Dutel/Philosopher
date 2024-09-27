@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/27 13:24:04 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/27 15:03:56 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,16 @@ int				init_philosophers(t_datastruct *data);
 
 /*Manage error*/
 int				err_msg(char *msg);
+void			death_msg(t_datastruct *data, unsigned long death, \
+int philonum);
+void			meal_reached_msg(t_datastruct *data);
 
 /*Utils*/
 int				check_args(char **argv);
 long			ft_atoi(const char *str);
 int				ft_strlen(char *s);
 int				print_infos(t_philostruct *philo, char *msg, int n);
+void			case_die_inf_eat(t_philostruct *philo);
 
 /*Routine actions*/
 int				philo_pair(t_philostruct *philo);
