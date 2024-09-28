@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 06:49:41 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/27 19:36:33 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/28 13:44:03 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int				check_args(char **argv);
 long			ft_atoi(const char *str);
 int				ft_strlen(char *s);
 int				print_infos(t_philostruct *philo, char *msg, int n);
-void			case_die_inf_eat(t_philostruct *philo);
+int				case_die_inf_eat(t_philostruct *philo);
 
 /*Routine actions*/
 int				philo_pair(t_philostruct *philo);

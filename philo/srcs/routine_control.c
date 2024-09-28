@@ -6,7 +6,7 @@
 /*   By: cdutel <cdutel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 18:51:35 by cdutel            #+#    #+#             */
-/*   Updated: 2024/09/19 00:38:25 by cdutel           ###   ########.fr       */
+/*   Updated: 2024/09/28 14:00:03 by cdutel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ void	set_dead_after_thinking(t_philostruct *philo)
 
 void	wait_to_start(t_philostruct *philo)
 {
+	int (waittime) = philo->datainfos->t_to_eat;
+	if (philo->datainfos->t_to_eat > philo->datainfos->t_to_die)
+		waittime = philo->datainfos->t_to_die;
 	if (philo->datainfos->n_philo == 1)
 	{
 		if (pthread_mutex_lock(&philo->datainfos->mut_is_ph_dead) == 0)
@@ -74,11 +77,11 @@ void	wait_to_start(t_philostruct *philo)
 		ft_msleep(1);
 	philo->last_meal = philo->datainfos->starttime;
 	if (philo->pos % 2 == 0)
-		ft_msleep(philo->datainfos->t_to_eat / 2);
+		ft_msleep(waittime / 2);
 	if (philo->datainfos->n_philo % 2 != 0 && \
 	philo->pos == philo->datainfos->n_philo && \
 	philo->datainfos->t_to_eat > philo->datainfos->t_to_sleep)
-		ft_msleep(philo->datainfos->t_to_eat);
+		ft_msleep(waittime);
 }
 
 void	*routine(void *philostruct)
@@ -97,7 +100,6 @@ void	*routine(void *philostruct)
 			break ;
 		if (sleeping(philo) == 1)
 			break ;
-		ft_msleep(philo->datainfos->t_to_sleep);
 		if (thinking(philo) == 1)
 			break ;
 		if (philo->datainfos->t_to_eat * 2 > philo->datainfos->t_to_die)
